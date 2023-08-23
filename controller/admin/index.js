@@ -1,14 +1,23 @@
 import Sequelize from 'sequelize'
+import formidable from 'formidable'
 
 class Admin {
     constructor() { }
 
     // 登录
     async login(req, res, next) {
-        res.send({
-            code: '0',
-            msg: '操作成功'
-        })
+        const form = formidable();
+
+        form.parse(req, (err, fields, files) => {
+            if (err) {
+                next(err);
+                return;
+            }
+            res.json({ fields, files });
+            console.log(fields)
+            const { username, password } = fields
+            console.log(typeof username)
+        });
     }
 }
 
