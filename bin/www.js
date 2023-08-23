@@ -6,13 +6,13 @@
 import app from '../app';
 import debug from 'debug';
 import http from 'http'
-import { PORT } from '../config';
+import { CONFIG } from '../config';
 
 /**
  * Get port from environment and store in Express.
  */
 
-app.set('port', PORT);
+app.set('port', CONFIG.PORT);
 
 /**
  * Create HTTP server.
@@ -24,7 +24,7 @@ const server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(PORT, () => {
+server.listen(CONFIG.PORT, () => {
   console.log('服务启动成功')
 })
 server.on('error', onError);
@@ -39,9 +39,9 @@ function onError(error) {
     throw error;
   }
 
-  const bind = typeof PORT === 'string'
-    ? 'Pipe ' + PORT
-    : 'Port ' + PORT;
+  const bind = typeof CONFIG.PORT === 'string'
+    ? 'Pipe ' + CONFIG.PORT
+    : 'Port ' + CONFIG.PORT;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {

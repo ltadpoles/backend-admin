@@ -4,7 +4,7 @@ import { DataTypes } from 'sequelize'
 // import { USER } from '../../initData'
 import sequelize from '../../mysql/db'
 
-const AdminSchema = sequelize.define(
+const UserSchema = sequelize.define(
     'user',
     {
         id: {
@@ -75,6 +75,6 @@ const AdminSchema = sequelize.define(
 )
 
 // 模型同步
-AdminSchema.sync()
+UserSchema.sync()
 
-export default AdminSchema
+export default UserSchema

@@ -1,9 +1,9 @@
 'use strict'
 
 import { Sequelize } from 'sequelize'
-import { CONFIG } from '../config'
+import { DBINIT } from '../config'
 
-const sequelize = new Sequelize('backend_admin', 'root', '123456', CONFIG)
+const sequelize = new Sequelize('backend_admin', 'root', '123456', DBINIT)
 
 try {
     sequelize.authenticate();
