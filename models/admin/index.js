@@ -43,7 +43,7 @@ const AdminSchema = sequelize.define(
             // defaultValue: USER.state,
             allowNull: false
         },
-        nick_name: {
+        name: {
             type: DataTypes.STRING,
             // defaultValue: USER.nick_name
         },

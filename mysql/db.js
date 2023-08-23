@@ -3,7 +3,7 @@
 import { Sequelize } from 'sequelize'
 import { CONFIG } from '../config'
 
-const sequelize = new Sequelize('node_sql', 'root', '123456', CONFIG)
+const sequelize = new Sequelize('backend_admin', 'root', '123456', CONFIG)
 
 try {
     sequelize.authenticate();

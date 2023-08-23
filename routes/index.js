@@ -1,9 +1,6 @@
-import express from 'express'
-const router = express.Router()
+import user from './users'
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  res.send('这个就是首页');
-});
+export default app => {
+  app.use('/', user)
+}
 
-module.exports = router;

@@ -11,4 +11,4 @@ export const CONFIG = {
     pool: POOL
 }
 
-export const PORT = process.env.PORT || '4000'
+export const PORT = process.env.PORT || '3000'
