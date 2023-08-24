@@ -1,5 +1,6 @@
 import formidable from 'formidable'
 import UserSchema from '../../models/user'
+import { createToken } from '../../utils/token'
 
 class Admin {
   // constructor() { }
@@ -39,8 +40,13 @@ class Admin {
           return
         }
 
+        const token = createToken({ username, state: user.state })
+
         res.send({
           code: '0',
+          data: {
+            token
+          },
           msg: '登录成功'
         })
 

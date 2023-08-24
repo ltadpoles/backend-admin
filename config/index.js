@@ -13,5 +13,6 @@ export const DBINIT = {
 
 export const CONFIG = {
   PORT: process.env.port || '3000',
+  SECRETKEY: 'backend_admin_ltadpole',
   PUBLICPATH: '/api' // 不需要验证 token 的接口
 }
