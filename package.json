@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www.js --exec babel-node --debug"
+    "start": "nodemon ./bin/www.js --exec babel-node --debug",
+    "lint": "eslint . --ext .js,.ts,.tsx --fix "
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@babel/core": "^7.22.10",
     "@babel/node": "^7.22.10",
-    "@babel/preset-env": "^7.22.10"
+    "@babel/preset-env": "^7.22.10",
+    "eslint": "^8.47.0"
   }
 }
