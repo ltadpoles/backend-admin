@@ -16,7 +16,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 // token校验，api 开头的基础接口不需要验证token
-app.use(expressjwt({ secret: CONFIG.SECRETKEY, algorithms: ['HS256'] }).unless({ path: ['/auth/adminLogin', /^\/api\//] }))
+// app.use(expressjwt({ secret: CONFIG.SECRETKEY, algorithms: ['HS256'] }).unless({ path: ['/auth/adminLogin', /^\/api\//] }))
 
 router(app)
 

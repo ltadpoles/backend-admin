@@ -1,16 +1,15 @@
+// import { genRSAKeyPaire } from '../../utils/crypto'
 
 class User {
   // constructor() { }
 
   // 获取用户信息
   async info(req, res) {
+    // let data = genRSAKeyPaire()
+
     res.send({
       code: '0',
-      data: {
-        name: '游荡de蝌蚪',
-        age: 18,
-        sex: '男'
-      },
+      data: {},
       msg: '操作成功'
     })
   }
