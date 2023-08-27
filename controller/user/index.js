@@ -1,23 +1,16 @@
-// import { genRSAKeyPaire } from '../../utils/crypto'
+import UserSchema from '../../models/user'
+// import sequelize from '../../mysql/db'
+import result from '../../utils/result'
 
-// import { varifyToken } from "../../utils/token"
+// const Op = sequelize.Op
 
 class User {
   // constructor() { }
 
   // 获取用户信息
   async info(req, res) {
-    // let data = genRSAKeyPaire()
-    // console.log(req)
-    // const token = req.headers.authorization.slice(7)
-    // const userInfo = varifyToken(token)
-    // console.log(userInfo)
-
-    res.send({
-      code: '0',
-      data: {},
-      msg: '操作成功'
-    })
+    const data = await UserSchema.findOne({ where: { username: req.auth.username }, attributes: { exclude: ['password'] } })
+    res.send(result.success({ data }))
   }
 
   // 获取用户菜单
