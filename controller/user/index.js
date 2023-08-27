@@ -13,6 +13,11 @@ class User {
     res.send(result.success({ data }))
   }
 
+  async update(req, res) {
+    const username = req.auth.username
+    const user = UserSchema.findOne({ where: req.body.username })
+  }
+
   // 获取用户菜单
   async menu(req, res) {
     res.send({
