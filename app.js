@@ -16,7 +16,17 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 // token校验，api 开头的基础接口不需要验证token
-// app.use(expressjwt({ secret: CONFIG.SECRETKEY, algorithms: ['HS256'] }).unless({ path: ['/auth/adminLogin', /^\/api\//] }))
+app.use(expressjwt({
+  secret: CONFIG.SECRETKEY, algorithms: ['HS256'],
+  isRevoked: (req, token) => {
+    // token过期之后移除
+    try {
+      return token.payload.exp < Date.now()
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
+}).unless({ path: [/^\/api\//] }))
 
 router(app)
 

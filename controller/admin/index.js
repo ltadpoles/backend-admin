@@ -1,6 +1,7 @@
 import formidable from 'formidable'
 import UserSchema from '../../models/user'
 import { createToken } from '../../utils/token'
+import crypto from '../../utils/crypto'
 
 class Admin {
   // constructor() { }
@@ -31,6 +32,10 @@ class Admin {
 
       try {
         const user = await UserSchema.findOne({ where: { username } })
+
+        // 加密后的密码比对
+        const cryptoPassword = crypto.getHmacHash(password.toString())
+        console.log(cryptoPassword)
 
         if (!user || password.toString() !== user.password.toString()) {
           res.send({
