@@ -15,22 +15,17 @@ class User {
 
   async update(req, res) {
     const auth = req.auth
-    const user = UserSchema.findOne({ where: req.body.username })
-    console.log(auth)
+    const user = UserSchema.findOne({ where: { username: req.body.username } })
     // 超级管理员
     if (auth.state === 0) {
-      console.log(req.body)
       const { avatar, name, sex, phone, email, address, dec } = req.body
 
       try {
-        await UserSchema.update(
-          {
-            avatar, name, sex, phone, email, address, dec
-          },
-          {
-            where: { username: 'tadpole2' }
+        await UserSchema.update({ dec }, {
+          where: {
+            username: req.body.username
           }
-        )
+        });
 
         res.send(result.success({ msg: '更新成功' }))
       } catch (err) {
