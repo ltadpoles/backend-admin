@@ -1,6 +1,7 @@
 import { CONFIG } from '../config'
 import admin from './admin'
-import user from './users'
+import user from './user'
+import tag from './tag'
 
 export default app => {
   app.use(CONFIG.PUBLICPATH, admin)
