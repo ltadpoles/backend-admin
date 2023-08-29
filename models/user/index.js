@@ -15,22 +15,18 @@ const UserSchema = sequelize.define(
     },
     user_id: {
       type: DataTypes.STRING,
-      // defaultValue: USER.user_id,
       allowNull: false
     },
     username: {
       type: DataTypes.STRING(10),
-      // defaultValue: USER.username,
       allowNull: false
     },
     password: {
       type: DataTypes.STRING,
-      // defaultValue: USER.password,
       allowNull: false
     },
     create_time: {
       type: DataTypes.BIGINT,
-      // defaultValue: USER.create_time,
       allowNull: false
     },
     avatar: {
@@ -38,34 +34,28 @@ const UserSchema = sequelize.define(
       defaultValue: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
     },
     state: {
-      // 权限：0：超级管理员 1：普通管理员
+      // 权限：0：超级管理员 1：普通管理员 2: 用户
       type: DataTypes.INTEGER(1),
-      // defaultValue: USER.state,
+      defaultValue: 2,
       allowNull: false
     },
     name: {
       type: DataTypes.STRING,
-      // defaultValue: USER.nick_name
     },
     sex: {
       type: DataTypes.INTEGER(1),
-      // defaultValue: USER.sex
     },
     phone: {
       type: DataTypes.STRING(11),
-      // defaultValue: USER.phone
     },
     email: {
       type: DataTypes.STRING,
-      // defaultValue: USER.email
     },
     address: {
       type: DataTypes.STRING,
-      // defaultValue: USER.address
     },
     dec: {
       type: DataTypes.STRING(50),
-      // defaultValue: USER.dec
     }
   },
   {
