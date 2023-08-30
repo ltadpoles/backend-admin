@@ -29,6 +29,15 @@ const UserSchema = sequelize.define(
       type: DataTypes.BIGINT,
       allowNull: false
     },
+    updateTime: {
+      type: DataTypes.BIGINT,
+    },
+    operator: {
+      type: DataTypes.STRING
+    },
+    operatorName: {
+      type: DataTypes.STRING
+    },
     avatar: {
       type: DataTypes.STRING,
       defaultValue: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'

@@ -29,7 +29,7 @@ class Admin {
         return res.send(result.fail({ msg: '用户名或密码有误' }))
       }
 
-      const token = createToken({ userId: user.userId, state: user.state })
+      const token = createToken({ userId: user.userId, username, state: user.state })
       res.send(result.success({ data: { token } }))
 
     } catch (err) {

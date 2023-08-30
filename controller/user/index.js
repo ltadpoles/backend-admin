@@ -31,7 +31,7 @@ class User {
 
     const updateData = async () => {
       try {
-        await UserSchema.update({ avatar, name, sex, phone, email, address, dec }, {
+        await UserSchema.update({ avatar, name, sex, phone, email, address, dec, updateTime: Date.now(), operator: req.auth.userId, operatorName: req.auth.username }, {
           where: {
             userId: req.body.userId
           }
