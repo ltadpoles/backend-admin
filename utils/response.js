@@ -1,4 +1,4 @@
-class Result {
+class Response {
   //   constructor() { }
 
   success({ data = null, msg = '操作成功' }) {
@@ -19,4 +19,4 @@ class Result {
   }
 }
 
-export default new Result
+export default new Response

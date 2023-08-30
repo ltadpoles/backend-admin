@@ -1,6 +1,6 @@
 import UserSchema from '../../models/user'
 // import sequelize from '../../mysql/db'
-import result from '../../utils/result'
+import response from '../../utils/response'
 
 // const Op = sequelize.Op
 
@@ -11,9 +11,9 @@ class User {
   async info(req, res) {
     try {
       const data = await UserSchema.findOne({ where: { userId: req.auth.userId }, attributes: { exclude: ['password'] } })
-      res.send(result.success({ data }))
+      res.send(response.success({ data }))
     } catch (err) {
-      res.send(result.fail({ msg: err.message }))
+      res.send(response.fail({ msg: err.message }))
     }
 
   }
@@ -21,12 +21,12 @@ class User {
   async update(req, res) {
     const { avatar, name, sex, phone, email, address, dec, userId } = req.body
     if (!userId) {
-      return res.send(result.fail({ msg: 'userId不能为空' }))
+      return res.send(response.fail({ msg: 'userId不能为空' }))
     }
 
     const user = await UserSchema.findOne({ where: { userId: req.body.userId } })
     if (!user) {
-      return res.send(result.fail({ msg: '用户不存在' }))
+      return res.send(response.fail({ msg: '用户不存在' }))
     }
 
     const updateData = async () => {
@@ -36,9 +36,9 @@ class User {
             userId: req.body.userId
           }
         })
-        res.send(result.success({ msg: '更新成功' }))
+        res.send(response.success({ msg: '更新成功' }))
       } catch (err) {
-        return res.send(result.fail({ msg: err.message }))
+        return res.send(response.fail({ msg: err.message }))
       }
     }
     // 超级管理员
@@ -48,7 +48,7 @@ class User {
     } else {
       // 如果登录用户与要修改的用户不同
       if (userId !== auth.userId) {
-        return res.send(result.fail({ code: '403', msg: '权限不足，请联系管理员' }))
+        return res.send(response.fail({ code: '403', msg: '权限不足，请联系管理员' }))
       }
       updateData()
     }

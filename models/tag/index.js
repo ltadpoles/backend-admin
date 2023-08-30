@@ -20,6 +20,15 @@ const TagSchema = sequelize.define(
       type: DataTypes.BIGINT,
       allowNull: false
     },
+    updateTime: {
+      type: DataTypes.BIGINT,
+    },
+    operator: {
+      type: DataTypes.STRING
+    },
+    operatorName: {
+      type: DataTypes.STRING
+    },
     // 状态 1：启用 2：禁用
     status: {
       type: DataTypes.INTEGER(1),

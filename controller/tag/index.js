@@ -1,13 +1,123 @@
-// import TagSchema from '../../models/tag'
-import result from '../../utils/result'
+import sequelize from 'sequelize'
+import TagSchema from '../../models/tag'
+import response from '../../utils/response'
+
+const Op = sequelize.Op
 
 class Tag {
   // constructor() { }
 
+  // 删除标签
   async add(req, res) {
-    // const { name, decription, status } = req.body
-    // const tag = await TagSchema.findOne({ where: { name } })
-    res.send(result.success({ msg: '操作成功' }))
+    const { name, decription, status } = req.body
+
+    if (!name) {
+      return res.send(response.fail({ msg: '标签名称不能为空' }))
+    }
+
+    const newTag = {
+      name: name.toLowerCase(),
+      decription,
+      status,
+      createTime: Date.now()
+    }
+
+    try {
+      const [tag, created] = await TagSchema.findOrCreate({ where: { name: name.toLowerCase() }, defaults: newTag })
+      if (!created) {
+        throw new Error('标签已存在，请直接使用')
+      }
+      res.send(response.success({ msg: '标签新增成功', data: tag }))
+
+    } catch (err) {
+      res.send(response.fail({ msg: err.message }))
+    }
+  }
+
+  // 标签删除
+  async del(req, res) {
+    const { id } = req.query
+    try {
+      if (!id) {
+        throw new Error('标签id不能为空')
+      }
+      // 支持批量删除
+      const ids = id.split(',')
+      const tag = await TagSchema.destroy({ where: { id: ids } })
+      if (!tag) {
+        throw new Error('标签不存在')
+      }
+      res.send(response.success({ msg: '标签删除成功' }))
+    } catch (err) {
+      res.send(response.fail({ msg: err.message }))
+    }
+  }
+
+  // 标签修改
+  async update(req, res) {
+    const { name, status, decription, id } = req.body
+    try {
+      if (!name) {
+        throw new Error('标签名称不能为空')
+      }
+      if (!id) {
+        throw new Error('标签id不能为空')
+      }
+      const tag = await TagSchema.findOne({ where: { name } })
+      if (tag) {
+        throw new Error('标签已存在，请直接使用')
+      }
+      const isUpdate = await TagSchema.update({
+        name: name.toLowerCase(),
+        status,
+        decription,
+        updateTime: Date.now(),
+        operator: req.auth.userId,
+        operatorName: req.auth.username
+      }, {
+        where: { id }
+      })
+      if (!isUpdate[0]) {
+        throw new Error('标签不存在')
+      }
+      res.send(response.success({ msg: '标签修改成功' }))
+    } catch (err) {
+      res.send(response.fail({ msg: err.message }))
+    }
+  }
+
+  // 标签列表
+  async list(req, res) {
+    const { pageSize = 10, pageNum = 1, param = {} } = req.body
+    const { name, status } = param
+    let where = {}
+
+    if (name) {
+      where = Object.assign(where, {
+        name: {
+          [Op.like]: `%${name}%`
+        }
+      })
+    }
+
+    if (status) {
+      where = Object.assign(where, {
+        status
+      })
+    }
+
+    try {
+      const { count, rows } = await TagSchema.findAndCountAll({
+        where,
+        order: [['createTime', 'DESC']],
+        offset: pageSize * (pageNum - 1),
+        limit: pageSize
+      });
+      const data = { total: count, list: rows }
+      res.send(response.success({ data }))
+    } catch (err) {
+      res.send(response.fail({ msg: err.message }))
+    }
   }
 }
 

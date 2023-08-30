@@ -1,7 +1,7 @@
 import UserSchema from '../../models/user'
 import { createToken } from '../../utils/token'
 import crypto from '../../utils/crypto'
-import result from '../../utils/result'
+import response from '../../utils/response'
 
 class Admin {
   // constructor() { }
@@ -18,7 +18,7 @@ class Admin {
         throw new Error('密码不能为空')
       }
     } catch (err) {
-      return res.send(result.fail({ msg: err.message }))
+      return res.send(response.fail({ msg: err.message }))
     }
 
     try {
@@ -26,14 +26,14 @@ class Admin {
       // 加密后的密码比对
       const cryptoPassword = crypto.getHmacHash(password)
       if (!user || cryptoPassword !== user.password) {
-        return res.send(result.fail({ msg: '用户名或密码有误' }))
+        return res.send(response.fail({ msg: '用户名或密码有误' }))
       }
 
       const token = createToken({ userId: user.userId, username, state: user.state })
-      res.send(result.success({ data: { token } }))
+      res.send(response.success({ data: { token } }))
 
     } catch (err) {
-      return res.send(result.fail({ msg: '登录失败' }))
+      return res.send(response.fail({ msg: '登录失败' }))
     }
   }
 
@@ -49,7 +49,7 @@ class Admin {
         throw new Error('密码不能为空')
       }
     } catch (err) {
-      return res.send(result.fail({ msg: err.message }))
+      return res.send(response.fail({ msg: err.message }))
     }
 
     const newUser = {
@@ -65,9 +65,9 @@ class Admin {
       if (!created) {
         throw new Error('用户已存在，请直接登录')
       }
-      res.send(result.success({ data: user }))
+      res.send(response.success({ data: user }))
     } catch (err) {
-      return res.send(result.fail({ msg: err.message }))
+      return res.send(response.fail({ msg: err.message }))
     }
   }
 }
