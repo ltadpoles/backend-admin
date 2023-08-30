@@ -29,7 +29,7 @@ class Admin {
         return res.send(result.fail({ msg: '用户名或密码有误' }))
       }
 
-      const token = createToken({ username, state: user.state })
+      const token = createToken({ userId: user.userId, state: user.state })
       res.send(result.success({ data: { token } }))
 
     } catch (err) {
@@ -55,9 +55,8 @@ class Admin {
     const newUser = {
       username,
       password: crypto.getHmacHash(password),
-      user_id: crypto.getMD5Hash(username),
-      state: 1,
-      create_time: Date.now()
+      userId: crypto.getMD5Hash(username),
+      createTime: Date.now()
     }
 
     try {

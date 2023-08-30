@@ -13,7 +13,7 @@ const UserSchema = sequelize.define(
       autoIncrement: true,
       allowNull: false //不允许为null
     },
-    user_id: {
+    userId: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -25,7 +25,7 @@ const UserSchema = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false
     },
-    create_time: {
+    createTime: {
       type: DataTypes.BIGINT,
       allowNull: false
     },

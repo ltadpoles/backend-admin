@@ -6,5 +6,6 @@ import tag from './tag'
 export default app => {
   app.use(CONFIG.PUBLICPATH, admin)
   app.use('/user', user)
+  app.use('/tag', tag)
 }
 

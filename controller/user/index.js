@@ -9,32 +9,45 @@ class User {
 
   // 获取用户信息
   async info(req, res) {
-    const data = await UserSchema.findOne({ where: { username: req.auth.username }, attributes: { exclude: ['password'] } })
-    res.send(result.success({ data }))
+    try {
+      const data = await UserSchema.findOne({ where: { userId: req.auth.userId }, attributes: { exclude: ['password'] } })
+      res.send(result.success({ data }))
+    } catch (err) {
+      res.send(result.fail({ msg: err.message }))
+    }
+
   }
 
   async update(req, res) {
-    const auth = req.auth
-    const user = UserSchema.findOne({ where: { username: req.body.username } })
-    const { avatar, name, sex, phone, email, address, dec } = req.body
+    const { avatar, name, sex, phone, email, address, dec, userId } = req.body
+    if (!userId) {
+      return res.send(result.fail({ msg: 'userId不能为空' }))
+    }
+
+    const user = await UserSchema.findOne({ where: { userId: req.body.userId } })
+    if (!user) {
+      return res.send(result.fail({ msg: '用户不存在' }))
+    }
+
     const updateData = async () => {
       try {
         await UserSchema.update({ avatar, name, sex, phone, email, address, dec }, {
           where: {
-            username: req.body.username
+            userId: req.body.userId
           }
-        });
+        })
         res.send(result.success({ msg: '更新成功' }))
       } catch (err) {
         return res.send(result.fail({ msg: err.message }))
       }
     }
     // 超级管理员
+    const auth = req.auth
     if (auth.state === 0) {
       updateData()
     } else {
       // 如果登录用户与要修改的用户不同
-      if (user.username !== auth.username) {
+      if (userId !== auth.userId) {
         return res.send(result.fail({ code: '403', msg: '权限不足，请联系管理员' }))
       }
       updateData()
