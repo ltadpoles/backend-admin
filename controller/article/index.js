@@ -3,9 +3,8 @@ import ArticleSchema from '../../models/article'
 import response from '../../utils/response'
 import TagSchema from '../../models/tag'
 import CategorySchema from '../../models/category'
-import ArticleTag from '../../models/article/tags'
-import ArticleCategory from '../../models/article/category'
-import UserSchema from '../../models/user'
+import ArticleTag from '../../models/article/tags' // eslint-disable-line
+import ArticleCategory from '../../models/article/category' // eslint-disable-line
 
 const Op = sequelize.Op
 
@@ -57,6 +56,7 @@ class Article {
         const { title, tags, category, type, startTime, endTime } = param
 
         let where = {}
+        let tagWhere = {}
 
         if (title) {
             where = Object.assign(where, {
@@ -80,6 +80,12 @@ class Article {
             })
         }
 
+        if (Array.isArray(tags) && tags.length > 0) {
+            tagWhere = Object.assign(tagWhere, {
+                id: tags
+            })
+        }
+
         try {
             const { count, rows } = await ArticleSchema.findAndCountAll({
                 include: [
@@ -89,7 +95,8 @@ class Article {
                         through: {
                             attributes: []
                         }, // 关联表信息
-                        attributes: ['name', 'id', 'decription']
+                        attributes: ['name', 'id', 'decription'],
+                        where: tagWhere
                     },
                     {
                         model: CategorySchema,
@@ -103,7 +110,8 @@ class Article {
                 where,
                 order: [['createTime', 'DESC']],
                 offset: pageSize * (pageNum - 1),
-                limit: pageSize
+                limit: pageSize,
+                distinct: true // 去重
             })
 
             const data = { total: count, list: rows }
@@ -134,11 +142,6 @@ class Article {
             )
 
             const arts = await ArticleSchema.findAll({ where })
-
-            arts.forEach(async item => {
-                await item.setTag([])
-            })
-
             for (let art of arts) {
                 await art.setTag([])
                 await art.setCategory([])

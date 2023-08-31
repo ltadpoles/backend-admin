@@ -43,10 +43,7 @@ class Tag {
       }
       // 支持批量删除
       const ids = id.split(',')
-      const tag = await TagSchema.destroy({ where: { id: ids } })
-      if (!tag) {
-        throw new Error('标签不存在')
-      }
+      await TagSchema.destroy({ where: { id: ids } })
       res.send(response.success({ msg: '标签删除成功' }))
     } catch (err) {
       res.send(response.fail({ msg: err.message }))
@@ -67,7 +64,7 @@ class Tag {
       if (tag) {
         throw new Error('标签已存在，请直接使用')
       }
-      const isUpdate = await TagSchema.update({
+      await TagSchema.update({
         name: name.toLowerCase(),
         status,
         decription,
@@ -77,9 +74,6 @@ class Tag {
       }, {
         where: { id }
       })
-      if (!isUpdate[0]) {
-        throw new Error('标签不存在')
-      }
       res.send(response.success({ msg: '标签修改成功' }))
     } catch (err) {
       res.send(response.fail({ msg: err.message }))
@@ -112,7 +106,7 @@ class Tag {
         order: [['createTime', 'DESC']],
         offset: pageSize * (pageNum - 1),
         limit: pageSize
-      });
+      })
       const data = { total: count, list: rows }
       res.send(response.success({ data }))
     } catch (err) {
