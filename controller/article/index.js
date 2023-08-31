@@ -114,6 +114,48 @@ class Article {
         }
     }
 
+    async del(req, res) {
+        const { id } = req.query
+
+        try {
+            if (!id) {
+                throw new Error('id不能为空')
+            }
+
+            if (typeof id !== 'string') {
+                throw new Error('参数错误')
+            }
+
+            let where = {}
+            where = Object.assign(where,
+                {
+                    id: id.split(',')
+                }
+            )
+
+            const arts = await ArticleSchema.findAll({ where })
+
+            arts.forEach(async item => {
+                await item.setTag([])
+            })
+
+            for (let art of arts) {
+                await art.setTag([])
+                await art.setCategory([])
+            }
+
+            await ArticleSchema.destroy({
+                where
+            })
+
+            res.send(response.success({}))
+
+        } catch (err) {
+            res.send(response.fail({ msg: err.message }))
+        }
+
+    }
+
 }
 
 export default new Article
