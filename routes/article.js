@@ -7,5 +7,6 @@ router.post('/add', Article.add)
 router.post('/list', Article.list)
 router.get('/del', Article.del)
 router.post('/update', Article.update)
+router.get('/info', Article.info)
 
 export default router
