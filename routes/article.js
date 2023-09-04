@@ -6,5 +6,6 @@ const router = express.Router()
 router.post('/add', Article.add)
 router.post('/list', Article.list)
 router.get('/del', Article.del)
+router.post('/update', Article.update)
 
 export default router
