@@ -45,6 +45,12 @@ const ArticleSchema = sequelize.define(
       type: DataTypes.BIGINT,
       defaultValue: 0
     },
+    createUser: {
+      type: DataTypes.STRING
+    },
+    createUserName: {
+      type: DataTypes.STRING
+    },
     operator: {
       type: DataTypes.STRING
     },

@@ -1,13 +1,14 @@
 import sequelize from 'sequelize'
 import TagSchema from '../../models/tag'
 import response from '../../utils/response'
+import ArticleTag from '../../models/article/tags'
 
 const Op = sequelize.Op
 
 class Tag {
   // constructor() { }
 
-  // 删除标签
+  // 新增标签
   async add(req, res) {
     const { name, decription, status } = req.body
 
@@ -19,7 +20,11 @@ class Tag {
       name: name.toLowerCase(),
       decription,
       status,
-      createTime: Date.now()
+      createTime: Date.now(),
+      operator: req.auth.userId,
+      operatorName: req.auth.username,
+      createUser: req.auth.userId,
+      createUserName: req.auth.username
     }
 
     try {
@@ -43,6 +48,10 @@ class Tag {
       }
       // 支持批量删除
       const ids = id.split(',')
+      const tagList = await ArticleTag.findAll({ where: { tagId: ids } })
+      if (tagList.length > 0) {
+        throw new Error('标签已关联文章，不可删除')
+      }
       await TagSchema.destroy({ where: { id: ids } })
       res.send(response.success({ msg: '标签删除成功' }))
     } catch (err) {

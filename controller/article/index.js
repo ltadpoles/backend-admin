@@ -28,7 +28,9 @@ class Article {
       createTime: Date.now(),
       updateTime: Date.now(),
       operator: req.auth.userId,
-      operatorName: req.auth.username
+      operatorName: req.auth.username,
+      createUser: req.auth.userId,
+      createUserName: req.auth.username,
     }
 
     try {
@@ -116,6 +118,7 @@ class Article {
           }
         ],
         where,
+        attributes: { exclude: ['html'] },
         order: [['createTime', 'DESC']],
         offset: pageSize * (pageNum - 1),
         limit: pageSize,

@@ -6,7 +6,7 @@ import category from './category'
 import article from './article'
 
 export default app => {
-  app.use(CONFIG.PUBLICPATH, admin)
+  app.use('/', admin)
   app.use('/user', user)
   app.use('/tag', tag)
   app.use('/category', category)

@@ -1,6 +1,7 @@
 import sequelize from 'sequelize'
 import CategorySchema from '../../models/category'
 import response from '../../utils/response'
+import ArticleCategory from '../../models/article/category'
 
 const Op = sequelize.Op
 
@@ -22,7 +23,9 @@ class Category {
       createTime: Date.now(),
       updateTime: Date.now(),
       operator: req.auth.userId,
-      operatorName: req.auth.username
+      operatorName: req.auth.username,
+      createUser: req.auth.userId,
+      createUserName: req.auth.username
     }
 
     try {
@@ -46,6 +49,10 @@ class Category {
       }
       // 支持批量删除
       const ids = id.split(',')
+      const categoryList = await ArticleCategory.findAll({ where: { categoryId: ids } })
+      if (categoryList.length > 0) {
+        throw new Error('分类已关联文章，不可删除')
+      }
       await CategorySchema.destroy({ where: { id: ids } })
       res.send(response.success({ msg: '分类删除成功' }))
     } catch (err) {
