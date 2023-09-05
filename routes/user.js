@@ -7,5 +7,6 @@ const router = express.Router()
 router.get('/info', User.info)
 router.get('/menu', User.menu)
 router.post('/update', superAdminAcl, User.update)
+router.post('/list', User.list)
 
 export default router

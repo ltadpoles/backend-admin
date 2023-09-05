@@ -1,8 +1,8 @@
 import UserSchema from '../../models/user'
-// import sequelize from '../../mysql/db'
+import sequelize from 'sequelize'
 import response from '../../utils/response'
 
-// const Op = sequelize.Op
+const Op = sequelize.Op
 
 class User {
   // constructor() { }
@@ -11,6 +11,9 @@ class User {
   async info(req, res) {
     try {
       const data = await UserSchema.findOne({ where: { userId: req.auth.userId }, attributes: { exclude: ['password'] } })
+      if (!data) {
+        return res.send(response.fail({ msg: '用户不存在' }))
+      }
       res.send(response.success({ data }))
     } catch (err) {
       res.send(response.fail({ msg: err.message }))
@@ -51,6 +54,40 @@ class User {
         return res.send(response.fail({ code: '403', msg: '权限不足，请联系管理员' }))
       }
       updateData()
+    }
+  }
+
+  async list(req, res) {
+    const { pageSize = 10, pageNum = 1, param = {} } = req.body
+    const { username, name } = param
+    let where = {}
+
+    if (username) {
+      where = Object.assign(where, {
+        username: {
+          [Op.like]: `%${username}%`
+        }
+      })
+    }
+    if (name) {
+      where = Object.assign(where, {
+        name: {
+          [Op.like]: `%${name}%`
+        }
+      })
+    }
+
+    try {
+      const { count, rows } = await UserSchema.findAndCountAll({
+        where,
+        order: [['createTime', 'DESC']],
+        offset: pageSize * (pageNum - 1),
+        limit: pageSize
+      })
+      const data = { total: count, list: rows }
+      res.send(response.success({ data }))
+    } catch (err) {
+      res.send(response.fail({ msg: err.message }))
     }
   }
 

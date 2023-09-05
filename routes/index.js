@@ -1,4 +1,3 @@
-import { CONFIG } from '../config'
 import admin from './admin'
 import user from './user'
 import tag from './tag'

@@ -3,8 +3,8 @@
  */
 
 const WHITE_API = [
-    '/login',
-    '/register'
+  '/login',
+  '/register'
 ]
 
 export default WHITE_API
