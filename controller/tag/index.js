@@ -10,7 +10,7 @@ class Tag {
 
   // 新增标签
   async add(req, res) {
-    const { name, decription, status } = req.body
+    const { name, description, status } = req.body
 
     if (!name) {
       return res.send(response.fail({ msg: '标签名称不能为空' }))
@@ -18,7 +18,7 @@ class Tag {
 
     const newTag = {
       name: name.toLowerCase(),
-      decription,
+      description,
       status,
       createTime: Date.now(),
       operator: req.auth.userId,
@@ -61,7 +61,7 @@ class Tag {
 
   // 标签修改
   async update(req, res) {
-    const { name, status, decription, id } = req.body
+    const { name, status, description, id } = req.body
     try {
       if (!name) {
         throw new Error('标签名称不能为空')
@@ -76,7 +76,7 @@ class Tag {
       await TagSchema.update({
         name: name.toLowerCase(),
         status,
-        decription,
+        description,
         updateTime: Date.now(),
         operator: req.auth.userId,
         operatorName: req.auth.username
@@ -92,7 +92,7 @@ class Tag {
   // 标签列表
   async list(req, res) {
     const { pageSize = 10, pageNum = 1, param = {} } = req.body
-    const { name, status } = param
+    const { name, status, startTime, endTime } = param
     let where = {}
 
     if (name) {
@@ -106,6 +106,14 @@ class Tag {
     if (status) {
       where = Object.assign(where, {
         status
+      })
+    }
+
+    if (startTime && endTime) {
+      where = Object.assign(where, {
+        createTime: {
+          [Op.between]: [startTime, endTime]
+        }
       })
     }
 

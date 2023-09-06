@@ -104,7 +104,7 @@ class Article {
             through: {
               attributes: []
             }, // 关联表信息
-            attributes: ['name', 'id', 'decription'],
+            attributes: ['name', 'id', 'description'],
             where: tagWhere
           },
           {
@@ -113,7 +113,7 @@ class Article {
             through: {
               attributes: []
             }, // 关联表信息
-            attributes: ['name', 'id', 'decription'],
+            attributes: ['name', 'id', 'description'],
             where: categoryWhere
           }
         ],
@@ -232,7 +232,7 @@ class Article {
             through: {
               attributes: []
             }, // 关联表信息
-            attributes: ['name', 'id', 'decription'],
+            attributes: ['name', 'id', 'description'],
           },
           {
             model: CategorySchema,
@@ -240,7 +240,7 @@ class Article {
             through: {
               attributes: []
             }, // 关联表信息
-            attributes: ['name', 'id', 'decription'],
+            attributes: ['name', 'id', 'description'],
           }
         ], where: { id }
       })

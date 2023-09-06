@@ -10,7 +10,7 @@ class Category {
 
   // 新增分类
   async add(req, res) {
-    const { name, decription, status } = req.body
+    const { name, description, status } = req.body
 
     if (!name) {
       return res.send(response.fail({ msg: '分类名称不能为空' }))
@@ -18,7 +18,7 @@ class Category {
 
     const newCategory = {
       name: name.toLowerCase(),
-      decription,
+      description,
       status,
       createTime: Date.now(),
       updateTime: Date.now(),
@@ -62,7 +62,7 @@ class Category {
 
   // 标签修改
   async update(req, res) {
-    const { name, status, decription, id } = req.body
+    const { name, status, description, id } = req.body
     try {
       if (!name) {
         throw new Error('分类名称不能为空')
@@ -77,7 +77,7 @@ class Category {
       await CategorySchema.update({
         name: name.toLowerCase(),
         status,
-        decription,
+        description,
         updateTime: Date.now(),
         operator: req.auth.userId,
         operatorName: req.auth.username

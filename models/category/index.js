@@ -40,7 +40,7 @@ const CategorySchema = sequelize.define(
       type: DataTypes.INTEGER(1),
       defaultValue: 1
     },
-    decription: {
+    description: {
       type: DataTypes.STRING(50),
     }
   },
