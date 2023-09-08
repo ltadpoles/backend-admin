@@ -70,7 +70,7 @@ class Tag {
         throw new Error('标签id不能为空')
       }
       const tag = await TagSchema.findOne({ where: { name } })
-      if (tag) {
+      if (tag && tag.id !== id) {
         throw new Error('标签已存在，请直接使用')
       }
       await TagSchema.update({
