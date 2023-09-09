@@ -21,7 +21,6 @@ class Category {
       description,
       status,
       createTime: Date.now(),
-      updateTime: Date.now(),
       operator: req.auth.userId,
       operatorName: req.auth.username,
       createUser: req.auth.userId,
@@ -71,7 +70,7 @@ class Category {
         throw new Error('分类id不能为空')
       }
       const category = await CategorySchema.findOne({ where: { name } })
-      if (category) {
+      if (category && category.id !== id) {
         throw new Error('分类已存在，请直接使用')
       }
       await CategorySchema.update({
@@ -93,7 +92,7 @@ class Category {
   // 分类列表
   async list(req, res) {
     const { pageSize = 10, pageNum = 1, param = {} } = req.body
-    const { name, status } = param
+    const { name, status, startTime, endTime } = param
     let where = {}
 
     if (name) {
@@ -107,6 +106,14 @@ class Category {
     if (status) {
       where = Object.assign(where, {
         status
+      })
+    }
+
+    if (startTime && endTime) {
+      where = Object.assign(where, {
+        createTime: {
+          [Op.between]: [startTime, endTime]
+        }
       })
     }
 
