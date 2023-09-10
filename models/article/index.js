@@ -68,7 +68,7 @@ const ArticleSchema = sequelize.define(
     },
     html: {
       type: DataTypes.TEXT,
-      // allowNull: false
+      allowNull: false
     },
   },
   {
