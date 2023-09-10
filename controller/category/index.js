@@ -130,6 +130,38 @@ class Category {
       res.send(response.fail({ msg: err.message }))
     }
   }
+
+  async listAll(req, res) {
+    const { name, id } = req.body
+    let where = {
+      status: 1
+    }
+
+    if (name) {
+      where = Object.assign(where, {
+        name: {
+          [Op.like]: `%${name}%`
+        }
+      })
+    }
+
+    if (id) {
+      where = Object.assign(where, {
+        id
+      })
+    }
+
+    try {
+      const data = await CategorySchema.findAll({
+        where,
+        attributes: ['name', 'id'],
+        order: [['createTime', 'DESC']],
+      })
+      res.send(response.success({ data }))
+    } catch (err) {
+      res.send(response.fail({ msg: err.message }))
+    }
+  }
 }
 
 export default new Category
