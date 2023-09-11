@@ -12,9 +12,9 @@ class Article {
   // constructor() { }
 
   async add(req, res) {
-    const { title, image, type, link, status, content, tags, categorys } = req.body
+    const { title, image, type, link, status, content, tags, categorys, html } = req.body
 
-    if (!title || !image || !content || !Array.isArray(tags) || !tags.length || !categorys) {
+    if (!title || !image || !content || !Array.isArray(tags) || !tags.length || !categorys || !html) {
       return res.send(response.fail({ msg: '参数错误' }))
     }
 
@@ -25,8 +25,8 @@ class Article {
       link,
       status,
       content,
+      html,
       createTime: Date.now(),
-      updateTime: Date.now(),
       operator: req.auth.userId,
       operatorName: req.auth.username,
       createUser: req.auth.userId,
