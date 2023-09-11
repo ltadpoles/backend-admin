@@ -26,7 +26,6 @@ const ArticleSchema = sequelize.define(
     },
     updateTime: {
       type: DataTypes.BIGINT,
-      allowNull: false
     },
     publishTime: {
       type: DataTypes.BIGINT,

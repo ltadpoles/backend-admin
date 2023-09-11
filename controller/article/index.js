@@ -58,7 +58,6 @@ class Article {
     const { title, tags, category, type, startTime, endTime } = param
 
     let where = {}
-    let tagWhere = {}
     let categoryWhere = {}
 
     if (title) {
@@ -82,13 +81,22 @@ class Article {
         }
       })
     }
-
     if (Array.isArray(tags) && tags.length > 0) {
-      tagWhere = Object.assign(tagWhere, {
-        id: tags
-      })
+      try {
+        const data = await ArticleTag.findAll({
+          where: {
+            tagId: tags
+          }
+        })
+        let articleArr = data.map(item => item.articleId)
+        let articleIds = Array.from(new Set(articleArr))
+        where = Object.assign(where, {
+          id: articleIds
+        })
+      } catch (err) {
+        res.send(response.fail({ msg: err.message }))
+      }
     }
-
     if (category) {
       categoryWhere = Object.assign(categoryWhere, {
         id: category
@@ -105,7 +113,6 @@ class Article {
               attributes: []
             }, // 关联表信息
             attributes: ['name', 'id', 'description'],
-            where: tagWhere
           },
           {
             model: CategorySchema,
@@ -118,7 +125,7 @@ class Article {
           }
         ],
         where,
-        attributes: { exclude: ['html'] },
+        attributes: { exclude: ['html', 'content'] },
         order: [['createTime', 'DESC']],
         offset: pageSize * (pageNum - 1),
         limit: pageSize,
