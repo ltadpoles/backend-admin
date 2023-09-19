@@ -64,11 +64,7 @@ const ArticleSchema = sequelize.define(
     content: {
       type: DataTypes.STRING,
       allowNull: false
-    },
-    html: {
-      type: DataTypes.TEXT,
-      allowNull: false
-    },
+    }
   },
   {
     timestamps: false,
