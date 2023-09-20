@@ -56,13 +56,18 @@ const ArticleSchema = sequelize.define(
     operatorName: {
       type: DataTypes.STRING
     },
-    // 状态 1：正常 2：精选
+    // 置顶 1：是 2：否
+    top: {
+      type: DataTypes.INTEGER(1),
+      defaultValue: 2
+    },
+    // 状态 1：正常 2：下架
     status: {
       type: DataTypes.INTEGER(1),
       defaultValue: 1
     },
     content: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false
     }
   },

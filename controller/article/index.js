@@ -261,6 +261,29 @@ class Article {
     }
   }
 
+  async topChange(req, res) {
+    const { id, top } = req.body
+
+    if (!id) {
+      return res.send(response.fail({ msg: 'id不能为空' }))
+    }
+
+    if (!top) {
+      return res.send(response.fail({ msg: '参数错误' }))
+    }
+
+    try {
+      const list = await ArticleSchema.findAll()
+      if (list.length > 3) {
+        throw new Error('置顶文章最多三篇')
+      }
+      const arts = await ArticleSchema.findOne({ where: { id } })
+      await arts.update({ top })
+      res.send(response.success({ msg: '修改成功' }))
+    } catch (err) {
+      res.send(response.fail({ msg: err.message }))
+    }
+  }
 }
 
 export default new Article
