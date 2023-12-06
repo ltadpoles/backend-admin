@@ -60,22 +60,22 @@ class Category {
     }
   }
 
-  // 标签修改
+  // 分类修改
   async update(req, res) {
     const { name, status, description, id } = req.body
     try {
-      if (!name) {
-        throw new Error('分类名称不能为空')
-      }
+      // if (!name) {
+      //   throw new Error('分类名称不能为空')
+      // }
       if (!id) {
         throw new Error('分类id不能为空')
       }
-      const category = await CategorySchema.findOne({ where: { name } })
-      if (category) {
-        throw new Error('分类已存在，请直接使用')
-      }
+      // const category = await CategorySchema.findOne({ where: { name } })
+      // if (category) {
+      //   throw new Error('分类已存在，请直接使用')
+      // }
       await CategorySchema.update({
-        name: name.toLowerCase(),
+        // name: name.toLowerCase(),
         status,
         description,
         updateTime: Date.now(),

@@ -63,18 +63,18 @@ class Tag {
   async update(req, res) {
     const { name, status, description, id } = req.body
     try {
-      if (!name) {
-        throw new Error('标签名称不能为空')
-      }
+      // if (!name) {
+      //   throw new Error('标签名称不能为空')
+      // }
       if (!id) {
         throw new Error('标签id不能为空')
       }
-      const tag = await TagSchema.findOne({ where: { name } })
-      if (tag) {
-        throw new Error('标签已存在，请直接使用')
-      }
+      // const tag = await TagSchema.findOne({ where: { name } })
+      // if (tag) {
+      //   throw new Error('标签已存在，请直接使用')
+      // }
       await TagSchema.update({
-        name: name.toLowerCase(),
+        // name: name.toLowerCase(),
         status,
         description,
         updateTime: Date.now(),
