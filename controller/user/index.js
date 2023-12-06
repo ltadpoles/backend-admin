@@ -22,7 +22,7 @@ class User {
   }
 
   async update(req, res) {
-    const { avatar, name, sex, phone, email, address, dec, userId } = req.body
+    const { avatar, name, sex, phone, email, address, description, userId } = req.body
     if (!userId) {
       return res.send(response.fail({ msg: 'userId不能为空' }))
     }
@@ -34,7 +34,7 @@ class User {
 
     const updateData = async () => {
       try {
-        await UserSchema.update({ avatar, name, sex, phone, email, address, dec, updateTime: Date.now(), operator: req.auth.userId, operatorName: req.auth.username }, {
+        await UserSchema.update({ avatar, name, sex, phone, email, address, description, updateTime: Date.now(), operator: req.auth.userId, operatorName: req.auth.username }, {
           where: {
             userId: req.body.userId
           }

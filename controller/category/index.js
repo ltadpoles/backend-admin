@@ -21,7 +21,6 @@ class Category {
       description,
       status,
       createTime: Date.now(),
-      updateTime: Date.now(),
       operator: req.auth.userId,
       operatorName: req.auth.username,
       createUser: req.auth.userId,
@@ -62,7 +61,7 @@ class Category {
 
   // 分类修改
   async update(req, res) {
-    const { name, status, description, id } = req.body
+    const { status, description, id } = req.body
     try {
       // if (!name) {
       //   throw new Error('分类名称不能为空')
@@ -93,7 +92,7 @@ class Category {
   // 分类列表
   async list(req, res) {
     const { pageSize = 10, pageNum = 1, param = {} } = req.body
-    const { name, status } = param
+    const { name, status, startTime, endTime } = param
     let where = {}
 
     if (name) {
@@ -110,6 +109,14 @@ class Category {
       })
     }
 
+    if (startTime && endTime) {
+      where = Object.assign(where, {
+        createTime: {
+          [Op.between]: [startTime, endTime]
+        }
+      })
+    }
+
     try {
       const { count, rows } = await CategorySchema.findAndCountAll({
         where,
@@ -118,6 +125,38 @@ class Category {
         limit: pageSize
       })
       const data = { total: count, list: rows }
+      res.send(response.success({ data }))
+    } catch (err) {
+      res.send(response.fail({ msg: err.message }))
+    }
+  }
+
+  async listAll(req, res) {
+    const { name, id } = req.body
+    let where = {
+      status: 1
+    }
+
+    if (name) {
+      where = Object.assign(where, {
+        name: {
+          [Op.like]: `%${name}%`
+        }
+      })
+    }
+
+    if (id) {
+      where = Object.assign(where, {
+        id
+      })
+    }
+
+    try {
+      const data = await CategorySchema.findAll({
+        where,
+        attributes: ['name', 'id'],
+        order: [['createTime', 'DESC']],
+      })
       res.send(response.success({ data }))
     } catch (err) {
       res.send(response.fail({ msg: err.message }))

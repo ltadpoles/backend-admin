@@ -26,7 +26,6 @@ class Article {
       status,
       content,
       createTime: Date.now(),
-      updateTime: Date.now(),
       operator: req.auth.userId,
       operatorName: req.auth.username,
       createUser: req.auth.userId,
@@ -58,7 +57,6 @@ class Article {
     const { title, tags, category, type, startTime, endTime } = param
 
     let where = {}
-    let tagWhere = {}
     let categoryWhere = {}
 
     if (title) {
@@ -82,13 +80,22 @@ class Article {
         }
       })
     }
-
     if (Array.isArray(tags) && tags.length > 0) {
-      tagWhere = Object.assign(tagWhere, {
-        id: tags
-      })
+      try {
+        const data = await ArticleTag.findAll({
+          where: {
+            tagId: tags
+          }
+        })
+        let articleArr = data.map(item => item.articleId)
+        let articleIds = Array.from(new Set(articleArr))
+        where = Object.assign(where, {
+          id: articleIds
+        })
+      } catch (err) {
+        res.send(response.fail({ msg: err.message }))
+      }
     }
-
     if (category) {
       categoryWhere = Object.assign(categoryWhere, {
         id: category
@@ -105,7 +112,6 @@ class Article {
               attributes: []
             }, // 关联表信息
             attributes: ['name', 'id', 'description'],
-            where: tagWhere
           },
           {
             model: CategorySchema,
@@ -118,7 +124,7 @@ class Article {
           }
         ],
         where,
-        attributes: { exclude: ['html'] },
+        attributes: { exclude: ['content'] },
         order: [['createTime', 'DESC']],
         offset: pageSize * (pageNum - 1),
         limit: pageSize,
@@ -255,6 +261,29 @@ class Article {
     }
   }
 
+  async topChange(req, res) {
+    const { id, top } = req.body
+
+    if (!id) {
+      return res.send(response.fail({ msg: 'id不能为空' }))
+    }
+
+    if (!top) {
+      return res.send(response.fail({ msg: '参数错误' }))
+    }
+
+    try {
+      const list = await ArticleSchema.findAll()
+      if (list.length > 3) {
+        throw new Error('置顶文章最多三篇')
+      }
+      const arts = await ArticleSchema.findOne({ where: { id } })
+      await arts.update({ top })
+      res.send(response.success({ msg: '修改成功' }))
+    } catch (err) {
+      res.send(response.fail({ msg: err.message }))
+    }
+  }
 }
 
 export default new Article

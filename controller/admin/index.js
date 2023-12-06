@@ -33,7 +33,7 @@ class Admin {
       res.send(response.success({ data: { token } }))
 
     } catch (err) {
-      return res.send(response.fail({ msg: '登录失败' }))
+      return res.send(response.fail({ msg: err.message }))
     }
   }
 

@@ -63,7 +63,7 @@ const UserSchema = sequelize.define(
     address: {
       type: DataTypes.STRING,
     },
-    dec: {
+    description: {
       type: DataTypes.STRING(50),
     }
   },
